@@ -10,10 +10,18 @@ interface NoteFormProps {
   onCancel: () => void;
 }
 
+const tags = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'] as const;
+
 const validationSchema = Yup.object({
-  title: Yup.string().required('Required').min(3, 'Too short'),
-  content: Yup.string().required('Required').min(5, 'Too short'),
-  tag: Yup.string().required('Required'),
+  title: Yup.string()
+    .required('Required')
+    .min(3, 'Too short')
+    .max(50, 'Too long'),
+  content: Yup.string()
+    .max(500, 'Content must be at most 500 characters'), // pole opcjonalne z max 500
+  tag: Yup.string()
+    .oneOf([...tags], 'Invalid tag')
+    .required('Required'),
 });
 
 const initialValues: CreateNoteInput = {
@@ -60,6 +68,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({ onCancel }) => {
             <option value="Todo">Todo</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
+            <option value="Meeting">Meeting</option>
             <option value="Shopping">Shopping</option>
           </Field>
           <ErrorMessage name="tag" component="span" className={css.error} />
