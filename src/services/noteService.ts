@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Note, NoteTag } from '../types/note';
+import type { Note } from '../types/note';
 
 const API_KEY = import.meta.env.VITE_NOTEHUB_TOKEN;
 
@@ -19,17 +19,17 @@ export interface FetchNotesParams {
 export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
-  page: number;
-  totalNotes: number;
 }
 
 export interface CreateNoteInput {
   title: string;
-  content?: string;
-  tag: NoteTag;
+  content: string;
+  tag: string;
 }
 
-export const fetchNotes = async (params: FetchNotesParams): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (
+  params: FetchNotesParams
+): Promise<FetchNotesResponse> => {
   const { data } = await api.get<FetchNotesResponse>('/notes', { params });
   return data;
 };

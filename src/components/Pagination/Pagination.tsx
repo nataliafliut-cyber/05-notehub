@@ -1,13 +1,16 @@
 import React from 'react';
+import type { ComponentType } from 'react';
 import ReactPaginateModule from 'react-paginate';
+import type { ReactPaginateProps } from 'react-paginate';
 import css from './Pagination.module.css';
 
-// Bezpieczne wyciągnięcie komponentu w zależności od typu modułu (ESM/CJS)
+type ModuleWithDefault<T> = { default: T };
+
 const ReactPaginate = (
-  'default' in ReactPaginateModule
-    ? ReactPaginateModule.default
-    : ReactPaginateModule
-) as unknown as React.ComponentType<any>;
+  ReactPaginateModule as unknown as ModuleWithDefault<
+    ComponentType<ReactPaginateProps>
+  >
+).default;
 
 interface PaginationProps {
   pageCount: number;
@@ -28,7 +31,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       pageCount={pageCount}
       marginPagesDisplayed={1}
       pageRangeDisplayed={3}
-      onPageChange={(event: { selected: number }) => onPageChange(event.selected)}
+      onPageChange={(event) => onPageChange(event.selected)}
       containerClassName={css.pagination}
       activeClassName={css.active}
       disabledClassName={css.disabled}
